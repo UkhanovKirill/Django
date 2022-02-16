@@ -3,6 +3,8 @@ from django.shortcuts import render
 from datetime import datetime
 from django.conf import settings
 
+from products.models import Product, ProductCategory
+
 
 def index(request):
     context = {
@@ -15,7 +17,9 @@ def products(request):
     file_path = settings.BASE_DIR / 'products/fixtures/goods.json'
     context = {
         'title': 'Geeksop - Каталог',
-        'products': json.load(open(file_path, encoding='utf-8')),
+        'products': Product.objects.all(),
+        'categories': ProductCategory.objects.all(),
+        #'products': json.load(open(file_path, encoding='utf-8')),
         'date': datetime.now()
     }
     return render(request, 'products/products.html', context)
