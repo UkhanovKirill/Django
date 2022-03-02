@@ -5,6 +5,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import user_passes_test
 from users.models import User
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
+from products.models import Product, ProductCategory
 
 
 date = datetime.now()
@@ -58,3 +59,24 @@ def admin_users_delete(request, pk):
     user.is_active = False
     user.save()
     return HttpResponseRedirect(reverse('admin_staff:admin_users'))
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_category(request):
+    categories = ProductCategory.objects.all()
+    context = {'title': 'GeekShop - Admin-Category', 'categories': categories, 'date': date}
+    return render(request, 'admins/admin-category.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_product(request):
+    products = Product.objects.all()
+    context = {'title': 'GeekShop - Admin-Category', 'products': products, 'date': date}
+    return render(request, 'admins/admin-products.html', context)
+
+
+@user_passes_test(lambda u: u.is_staff)
+def admin_product_card(request, pk):
+    product = Product.objects.get(id=pk)
+    context = {'title': 'GeekShop - Admin-Category', 'product': product, 'date': date}
+    return render(request, 'products/includes/card.html', context)
