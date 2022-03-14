@@ -30,15 +30,15 @@ class CommonMixin(SuccessMessageMixin):
         context['date'] = self.date
         return context
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CommonMixin, self).dispatch(request, *args, **kwargs)
+
 
 class UserAdminListView(CommonMixin, ListView):
     model = User
     template_name = 'admins/admin-users-read.html'
     title = 'GeekShop - Админка'
-
-    @method_decorator(user_passes_test(lambda u: u.is_staff))
-    def dispatch(self, request, *args, **kwargs):
-        return super(UserAdminListView, self).dispatch(request, *args, **kwargs)
 
 
 class UserAdminCreateView(CommonMixin, CreateView):
@@ -71,14 +71,10 @@ class UserAdminDeleteView(CommonMixin, DeleteView):
         return HttpResponseRedirect(self.success_url)
 
 
-
-
-
-@user_passes_test(lambda u: u.is_staff)
-def admin_category(request):
-    categories = ProductCategory.objects.all()
-    context = {'title': 'GeekShop - Admin-Category', 'categories': categories, 'date': date}
-    return render(request, 'admins/admin-category.html', context)
+class CategoryAdminListView(CommonMixin, ListView):
+    model = ProductCategory
+    template_name = 'admins/admin-category.html'
+    title = 'GeekShop - Admin-Category'
 
 
 @user_passes_test(lambda u: u.is_staff)
