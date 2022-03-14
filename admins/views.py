@@ -77,11 +77,10 @@ class CategoryAdminListView(CommonMixin, ListView):
     title = 'GeekShop - Admin-Category'
 
 
-@user_passes_test(lambda u: u.is_staff)
-def admin_product(request):
-    products = Product.objects.all()
-    context = {'title': 'GeekShop - Admin-Category', 'products': products, 'date': date}
-    return render(request, 'admins/admin-products.html', context)
+class ProductAdminListView(CommonMixin, ListView):
+    model = Product
+    template_name = 'admins/admin-products.html'
+    title = 'GeekShop - Admin-Product'
 
 
 @user_passes_test(lambda u: u.is_staff)
