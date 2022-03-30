@@ -2,11 +2,11 @@
 {% block content %}
     <main>
             <div class="container-fluid">
-                <h1 class="mt-4">Пользователи</h1>
+                <h1 class="mt-4">Категории</h1>
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
-                        Пользователи
+                        Категории
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -22,7 +22,7 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                {% for category in categories %}
+                                {% for category in object_list %}
                                     <tr>
                                     <td><a href="{% url 'admin_staff:admin_users_update' user.id %}" style="color: dodgerblue">{{ category.name }}</a></td>
                                 </tr>
