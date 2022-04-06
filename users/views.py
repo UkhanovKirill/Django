@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.shortcuts import reverse, HttpResponseRedirect, render
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView, UpdateView
@@ -20,8 +24,33 @@ class UserRegistrationView(CommonContextMixin, SuccessMessageMixin, CreateView):
     form_class = UserRegistrationForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
-    success_message = 'Вы успешно зарегестрировались!'
+    # success_message = 'Вы успешно зарегестрировались!'
     title = 'GeekShop - Регистрация'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            if self.send_verify_link(user):
+                messages.set_level(request, messages.SUCCESS)
+                messages.success(request, 'Вы успешно зарегестрировались!')
+                return HttpResponseRedirect(reverse('users:login'))
+            else:
+                messages.set_level(request, messages.ERROR)
+                messages.success(request, form.errors)
+        else:
+            messages.set_level(request, messages.ERROR)
+            messages.success(request, form.errors)
+        return render(request, self.template_name, {'form': form})
+
+    def send_verify_link(self, user):
+        verify_link = reverse('users:verify', args=[user.email, user.activation_key])
+        subject = f'Подтверждение учетной записи {user.username}'
+        message = f'Для подтверждения учетной записи {user.username} на портале перейдите по ссылке: \n {settings.DOMAIN_NAME}{verify_link}'
+        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+    def verify(self, email, activate_key):
+        pass
 
 
 class UserProfileView(CommonContextMixin, UpdateView):
