@@ -34,7 +34,7 @@
                                 <tbody>
                                 {% for product in object_list %}
                                     <tr>
-                                    <td><a href="{% url 'admin_staff:admin_product_card' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
+                                    <td><a href="{% url 'admins:admin_product_card' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
                                     <td>{{ product.category }}</td>
                                     <td>{{ product.image }}</td>
                                     <td>{{ product.description }}</td>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{% url 'admin_staff:admin_users_create' %}">
+                        <a href="{% url 'admins:admin_users_create' %}">
                             <button class="btn btn-success">Создать пользователя</button>
                         </a>
                     </div>
