@@ -11,5 +11,5 @@ urlpatterns = [
     path('users-delete/<int:pk>', UserAdminDeleteView.as_view(), name='admin_users_delete'),
     path('users-category/', CategoryAdminListView.as_view(), name='admin_category'),
     path('users-product/', ProductAdminListView.as_view(), name='admin_product'),
-    path('users-product_card/<int:pk>', admin_product_card, name='admin_product_card'),
+    path('users-product-card/<int:pk>', admin_product_card, name='admin_product_card'),
 ]

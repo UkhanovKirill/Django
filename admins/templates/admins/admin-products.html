@@ -34,7 +34,7 @@
                                 <tbody>
                                 {% for product in object_list %}
                                     <tr>
-                                    <td><a href="{% url 'admins:admin_product_card' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
+                                    <td><a href="{% url 'products:product' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
                                     <td>{{ product.category }}</td>
                                     <td>{{ product.image }}</td>
                                     <td>{{ product.description }}</td>

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.core.mail import send_mail
 from django.shortcuts import reverse, HttpResponseRedirect, render
 from django.contrib.messages.views import SuccessMessageMixin
@@ -49,8 +49,17 @@ class UserRegistrationView(CommonContextMixin, SuccessMessageMixin, CreateView):
         message = f'Для подтверждения учетной записи {user.username} на портале перейдите по ссылке: \n {settings.DOMAIN_NAME}{verify_link}'
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
-    def verify(self, email, activate_key):
-        pass
+    def verify(self, email, activation_key):
+        try:
+            user = User.objects.get(email=email)
+            if user and user.activation_key == activation_key and not user.is_activation_key_expires():
+                user.activation_key = ''
+                user.activation_key_expires = None
+                user.is_active = True
+                auth.login(self, user)
+            return render(self, 'users/verification.html')
+        except Exception as e:
+            return HttpResponseRedirect(reverse('index'))
 
 
 class UserProfileView(CommonContextMixin, UpdateView):
