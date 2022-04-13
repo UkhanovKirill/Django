@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.contrib import messages, auth
 from django.core.mail import send_mail
-from django.shortcuts import reverse, HttpResponseRedirect, render
+from django.shortcuts import reverse, HttpResponseRedirect, render, redirect
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 
 from common.views import CommonContextMixin
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, UserProfileEditForm
 from users.models import User
 from baskets.models import Basket
 
@@ -67,6 +67,14 @@ class UserProfileView(CommonContextMixin, UpdateView):
     form_class = UserProfileForm
     template_name = 'users/profile.html'
     title = 'GeekShop - Личный кабинет'
+    success_url = reverse_lazy('users:profile')
+
+    def post(self, request, *args, **kwargs):
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+        return redirect(self.success_url)
 
     def get_success_url(self):
         return reverse_lazy('users:profile', args=(self.object.id,))
@@ -74,6 +82,7 @@ class UserProfileView(CommonContextMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UserProfileView, self).get_context_data(**kwargs)
         context['baskets'] = Basket.objects.filter(user=self.object)
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
         return context
 
 
