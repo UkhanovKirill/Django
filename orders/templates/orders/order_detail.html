@@ -10,8 +10,8 @@
                 <span class="category_name">{{ item.product.category.name }}</span>
                 <span class="product_name">{{ item.product.name }}</span>
                 <span class="product_price">{{ item.product.price }} руб</span>
-                <span class="product_quantity">{{ item.product.quantity }} шт</span>
-                <span class="product_sum">{{ item.total_sum }} руб</span>
+                <span class="product_quantity">{{ item.quantity }} шт</span>
+                <span class="product_cost">{{ item.get_total_cost }} руб</span>
             </div>
         {% endfor %}
     </div>
