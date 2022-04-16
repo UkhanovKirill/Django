@@ -3,13 +3,13 @@ from users.models import User
 from products.models import Product
 
 
-class BasketQuerySet(models.QuerySet):
-
-    def delete(self, *args, **kwargs):
-        super(BasketQuerySet, self).delete(*args, **kwargs)
-        for item in self:
-            item.pobject.product.quantity += item.quantity
-            item.product.save()
+# class BasketQuerySet(models.QuerySet):
+#
+#     def delete(self, *args, **kwargs):
+#         super(BasketQuerySet, self).delete(*args, **kwargs)
+#         for item in self:
+#             item.pobject.product.quantity += item.quantity
+#             item.product.save()
 
 
 class Basket(models.Model):
@@ -18,7 +18,7 @@ class Basket(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     create_timestamp = models.DateTimeField(auto_now_add=True)
 
-    objects = BasketQuerySet.as_manager()
+    # objects = BasketQuerySet.as_manager()
 
     def __str__(self):
         return f'Корзина для {self.user.username} | Продукт {self.product.name}'
