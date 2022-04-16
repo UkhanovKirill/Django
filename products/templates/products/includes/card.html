@@ -1,5 +1,6 @@
 <div class="row product_list">
     {% for product in object_list %}
+        {% if product.quantity > 0 %}
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
                 <a href="#">
@@ -20,5 +21,6 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 </div>
