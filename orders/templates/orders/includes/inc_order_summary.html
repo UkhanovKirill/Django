@@ -16,11 +16,12 @@
     <hr>
     <div class="h4">Заказчик: {{ user.last_name }} {{ user.first_name }}</div>
     {% if basket.0 %}
+{#        не выводит общее количество товаров и сумму #}
         <div class="h4">
             Общее количество товаров: {{ basket.0.total_quantity }}
         </div>
         <div class="h3">
-            Общая стоимость: {{ object.total_sum }}
+            Общая стоимость: {{ basket.0.total_sum }}
         </div>
     {% endif %}
 {% endif %}
